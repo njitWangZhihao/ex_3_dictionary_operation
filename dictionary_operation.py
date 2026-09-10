@@ -7,92 +7,111 @@ student = {
     "gpa": 3.6
 }
 
+print("Initial student record:")
+for key, value in student.items():
+    print(f"{key}: {value}")
+print()
 
-# First, display the complete record using for loop, printing and some string formatting only
+if "email" not in student:
+    email = input("Please enter an email: ").strip()
+    student["email"] = email
 
+while True:
+    new_city = input("Please enter a new city: ").strip()
+    if new_city:
+        student["city"] = new_city
+        break
+    print("City cannot be empty.")
 
+phone = student.get("phone")
+if phone is None:
+    print("Phone number not found.")
+    phone = input("Please enter a phone number: ").strip()
 
-# Check if there's a key called 'email'. If not, ask the user to enter an email
+student["contact"] = {
+    "phone": phone,
+    "email": student["email"]
+}
 
+student["courses"] = {
+    "Python": 88,
+    "Databases": 91,
+    "Software Engineering": 84
+}
 
+def calculate_average(courses):
+    total = 0
+    count = 0
+    for score in courses.values():
+        total += score
+        count += 1
+    return total / count if count > 0 else 0
 
-# Ask the user to enter a new city, and update the existing city with this new one
-# Make sure the new city is not an empty string
+def get_academic_status(average):
+    if average >= 90:
+        return "Excellent"
+    elif average >= 75:
+        return "Good"
+    elif average >= 60:
+        return "Pass"
+    else:
+        return "At Risk"
 
+average = calculate_average(student["courses"])
+student["academic_status"] = get_academic_status(average)
 
+search_course = input("Enter a course name to search: ").strip()
+if search_course in student["courses"]:
+    print(f"{search_course}: {student['courses'][search_course]}")
+else:
+    print("Course not found")
 
-# Check if there's 'phone' key in the dictionary. If not, print a message saying "Phone number not found."
-# Use the get() method
+update_course = input("Enter a course name to update: ").strip()
 
+while True:
+    try:
+        new_score = float(input(f"Enter new score for {update_course} (0-100): "))
+        if 0 <= new_score <= 100:
+            if new_score.is_integer():
+                new_score = int(new_score)
+            break
+        else:
+            print("Score must be between 0 and 100.")
+    except ValueError:
+        print("Please enter a valid number.")
 
+if update_course in student["courses"]:
+    old_score = student["courses"][update_course]
+    student["courses"][update_course] = new_score
+    print(f"{update_course} score updated from {old_score} to {new_score}.")
+else:
+    student["courses"][update_course] = new_score
+    print(f"New course {update_course} added with score {new_score}.")
 
-# Add a new key called 'contact' to the dictionary, which is itself a dictionary containing two keys: 'phone' and 'email'.
+average = calculate_average(student["courses"])
+student["academic_status"] = get_academic_status(average)
 
-
-
-
-# Add another key called 'courses' to the dictionary, which is itself a dictionary containing three keys: 'Python', 'Databases', and 'Software Engineering', with 88, 91, and 84 as their corresponding scores
-
-
-
-# Calculate the average score for the student without built-in functions like sum(). Use a for loop instead. 
-
-
-
-# Add a new key called 'academic_status' to the dictionary
-# It should be a string that indicates the student's academic status based on the average score. 
-# If the score is >= 90, the status should be "Excellent".
-# If the score is >= 75, the status should be "Good".
-# If the score is >= 60, the status should be "Pass".
-# If the score is < 60, the status should be "At Risk".
-
-
-
-
-# Add the logic to search for a course. 
-# If the course is found, print the course name and score. If not, print "Course not found".
-
-
-
-
-# Add the logic to update a course score. 
-# Ask the user to enter the course name and the new score. 
-# If the course is found, then update the score and print a message indicating the change.
-# While adding the new course, make sure the new score is a number between 0 and 100
-
-
-
-
-# Recaclculate the average score and update the academic status after the course score has been updated.
-
-
-
-
-# Display the final formatted student record with all the updated information, including the average score and academic status.
-# It should look like the following: 
-""" 
-=====================================
-        STUDENT RECORD
-=====================================
-
-Name: Alice Wong
-Student ID: ST1024
-Age: 21
-Program: Software Engineering
-City: Shanghai
-GPA: 3.6
-
-CONTACT
-Phone: 13800001111
-Email: alice.wong@university.edu
-
-COURSE RESULTS
-Python: 88
-Databases: 91
-Software Engineering: 84
-
-Average Score: 87.7
-Academic Status: Good
-
-===================================== """
-
+print()
+print("=====================================")
+print("        STUDENT RECORD")
+print("=====================================")
+print()
+print(f"Name: {student['name']}")
+print(f"Student ID: {student['student_id']}")
+print(f"Age: {student['age']}")
+print(f"Program: {student['program']}")
+print(f"City: {student['city']}")
+print(f"GPA: {student['gpa']}")
+print()
+print("CONTACT")
+print(f"Phone: {student['contact']['phone']}")
+print(f"Email: {student['contact']['email']}")
+print()
+print("COURSE RESULTS")
+for course, score in student["courses"].items():
+    print(f"{course}: {score}")
+print()
+print(f"Average Score: {average:.1f}")
+print(f"Academic Status: {student['academic_status']}")
+print()
+print("=====================================")
